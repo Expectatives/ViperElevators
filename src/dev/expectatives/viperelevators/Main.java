@@ -9,19 +9,19 @@ import org.bukkit.block.*;
 import org.bukkit.*;
 
 public class Main extends JavaPlugin implements Listener
-{	
-	PluginDescriptionFile pdffile = getDescription();
-	public String version = pdffile.getVersion();
-	public String nombre = ChatColor.GRAY+"["+ChatColor.GOLD+pdffile.getName()+ChatColor.GRAY+"]";
+{
+    PluginDescriptionFile pdffile = getDescription();
+    public String version = pdffile.getVersion();
+    public String nombre = ChatColor.GRAY+"["+ChatColor.GOLD+pdffile.getName()+ChatColor.GRAY+"]";
 	
     public void onEnable() {
     	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"----------------------------------------");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GOLD+"   ViperElevators Plugin");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Has been enabled (version: "+ChatColor.YELLOW+version+ChatColor.WHITE+")");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Plugin made by: "+ChatColor.YELLOW+"Expectatives#1157");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.YELLOW+" Registering config.yml file...");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GOLD+"   ViperElevators Plugin");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Has been enabled (version: "+ChatColor.YELLOW+version+ChatColor.WHITE+")");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Plugin made by: "+ChatColor.YELLOW+"Expectatives#1157");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.YELLOW+" Registering config.yml file...");
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
         Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GREEN+" Successfully registered config.yml file!");
@@ -29,9 +29,9 @@ public class Main extends JavaPlugin implements Listener
         this.getServer().getPluginManager().registerEvents((Listener)this, (Plugin)this);
         Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GREEN+" Successfully registered listeners!");
         Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GREEN+" Plugin load all Elevators config!");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Discord Server: "+ChatColor.YELLOW+"https://discord.faithcommunity.club/");
-		Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"----------------------------------------");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.WHITE+" Discord Server: "+ChatColor.YELLOW+"https://discord.faithcommunity.club/");
+	Bukkit.getConsoleSender().sendMessage(nombre+ChatColor.GRAY+"----------------------------------------");
     }
     
     public void onDisable() {

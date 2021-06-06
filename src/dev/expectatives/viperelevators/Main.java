@@ -1,12 +1,22 @@
 package dev.expectatives.viperelevators;
 
-import org.bukkit.plugin.java.*;
-import org.bukkit.plugin.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.block.*;
 import org.bukkit.block.*;
 import org.bukkit.*;
+
+/**
+ * 
+ * @author Cristhian (Expectatives)
+ * sàbado, junio 05, 2021
+ */
 
 public class Main extends JavaPlugin implements Listener
 {
@@ -16,12 +26,12 @@ public class Main extends JavaPlugin implements Listener
 	
     public void onEnable() {
     	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"----------------------------------------");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GOLD+"   ViperElevators Plugin");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Has been enabled (version: "+ChatColor.YELLOW+version+ChatColor.WHITE+")");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Plugin made by: "+ChatColor.YELLOW+"Expectatives#1157");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.YELLOW+" Registering config.yml file...");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GOLD+"   ViperElevators Plugin");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Has been enabled (version: "+ChatColor.YELLOW+version+ChatColor.WHITE+")");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Plugin made by: "+ChatColor.YELLOW+"Expectatives#1157");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
+    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.YELLOW+" Registering config.yml file...");
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
         Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Successfully registered config.yml file!");
@@ -29,9 +39,9 @@ public class Main extends JavaPlugin implements Listener
         this.getServer().getPluginManager().registerEvents((Listener)this, (Plugin)this);
         Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Successfully registered listeners!");
         Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Plugin load all Elevators config!");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Discord Server: "+ChatColor.YELLOW+"https://discord.faithcommunity.club/");
-	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"----------------------------------------");
+        Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
+		Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Discord Server: "+ChatColor.YELLOW+"https://dsc.gg/faithcommunity/");
+		Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"----------------------------------------");
     }
     
     public void onDisable() {
@@ -59,53 +69,53 @@ public class Main extends JavaPlugin implements Listener
     
     @EventHandler
     public void PlayerInteractEvent(final PlayerInteractEvent event) {
-        final boolean ret = event.getClickedBlock() == null;
-        if (ret) {
-            return;
-        }
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.WALL_SIGN) || event.getClickedBlock().getType() == Material.SIGN_POST) {
-            final Sign sing = (Sign)event.getClickedBlock().getState();
-            if (sing.getLine(1).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.TITLE")))) {
-                if (sing.getLine(2).equalsIgnoreCase("Up")) {
-                    final Location loc = event.getClickedBlock().getLocation().add(0.0, 1.0, 0.0);
-                    while (loc.getY() < 254.0) {
-                        if (loc.getBlock().getType() != Material.AIR) {
-                            while (loc.getBlockY() < 254) {
-                                if (loc.getBlock().getType() == Material.AIR && loc.add(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
-                                    final Location pl = event.getPlayer().getLocation();
-                                    event.getPlayer().teleport(new Location(pl.getWorld(), loc.getX() + 0.5, loc.getY() - 1.0, loc.getZ() + 0.5, pl.getYaw(), pl.getPitch()));
-                                    break;
+    	if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.WALL_SIGN) || (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.SIGN_POST)) {
+        	final Block block = event.getClickedBlock();
+        	final Sign sing = (Sign)event.getClickedBlock().getState();
+            if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+            	if (sing.getLine(1).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.TITLE")))) {
+                    if (sing.getLine(2).equalsIgnoreCase("Up")) {
+                        final Location loc = event.getClickedBlock().getLocation().add(0.0, 1.0, 0.0);
+                        while (loc.getY() < 254.0) {
+                            if (loc.getBlock().getType() != Material.AIR) {
+                                while (loc.getBlockY() < 254) {
+                                    if (loc.getBlock().getType() == Material.AIR && loc.add(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
+                                        final Location pl = event.getPlayer().getLocation();
+                                        event.getPlayer().teleport(new Location(pl.getWorld(), loc.getX() + 0.5, loc.getY() - 1.0, loc.getZ() + 0.5, pl.getYaw(), pl.getPitch()));
+                                        break;
+                                    }
+                                    loc.add(0.0, 1.0, 0.0);
                                 }
-                                loc.add(0.0, 1.0, 0.0);
+                                break;
                             }
-                            break;
+                            loc.add(0.0, 1.0, 0.0);
                         }
-                        loc.add(0.0, 1.0, 0.0);
+                        if (loc.getY() == 254.0) {
+                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
+                        }
                     }
-                    if (loc.getY() == 254.0) {
-                        event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
-                    }
-                }
-                else if (sing.getLine(2).equalsIgnoreCase("Down")) {
-                    final Location loc = event.getClickedBlock().getLocation().subtract(0.0, 1.0, 0.0);
-                    while (loc.getY() > 2.0) {
-                        if (loc.getBlock().getType() != Material.AIR) {
-                            while (loc.getY() > 2.0) {
-                                if (loc.getBlock().getType() == Material.AIR && loc.subtract(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
-                                    event.getPlayer().teleport(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getY(), loc.getZ() + 0.5, event.getPlayer().getLocation().getYaw(), event.getPlayer().getLocation().getPitch()));
-                                    break;
+                    else if (sing.getLine(2).equalsIgnoreCase("Down")) {
+                        final Location loc = event.getClickedBlock().getLocation().subtract(0.0, 1.0, 0.0);
+                        while (loc.getY() > 2.0) {
+                            if (loc.getBlock().getType() != Material.AIR) {
+                                while (loc.getY() > 2.0) {
+                                    if (loc.getBlock().getType() == Material.AIR && loc.subtract(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
+                                        event.getPlayer().teleport(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getY(), loc.getZ() + 0.5, event.getPlayer().getLocation().getYaw(), event.getPlayer().getLocation().getPitch()));
+                                        break;
+                                    }
+                                    loc.subtract(0.0, 1.0, 0.0);
                                 }
-                                loc.subtract(0.0, 1.0, 0.0);
+                                break;
                             }
-                            break;
+                            loc.subtract(0.0, 1.0, 0.0);
                         }
-                        loc.subtract(0.0, 1.0, 0.0);
-                    }
-                    if (loc.getY() == 2.0) {
-                        event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
+                        if (loc.getY() == 2.0) {
+                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
+                        }
                     }
                 }
             }
+            
         }
     }
 }

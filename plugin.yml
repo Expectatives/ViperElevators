@@ -1,5 +1,5 @@
 name: ViperElevators
-version: 0.1-SNAPSHOT
-author: FaithCommunity
+version: 0.5-SNAPSHOT
+author: Expectatives
 description: Simple Viper Elevators
 main: dev.expectatives.viperelevators.Main

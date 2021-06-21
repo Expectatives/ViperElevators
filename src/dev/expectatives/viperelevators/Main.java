@@ -16,7 +16,7 @@ import dev.expectatives.viperelevators.util.CC;
  */
 
 public class Main extends JavaPlugin {
-	private static Main plugin;
+    private static Main plugin;
     PluginDescriptionFile pdffile = getDescription();
     public String version = pdffile.getVersion();
     public String name = CC.translate("&7[&6"+pdffile.getName()+"&7]");

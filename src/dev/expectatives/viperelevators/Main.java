@@ -1,121 +1,52 @@
 package dev.expectatives.viperelevators;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
-import org.bukkit.event.block.*;
-import org.bukkit.block.*;
-import org.bukkit.*;
+import dev.expectatives.viperelevators.file.ConfigFile;
+import dev.expectatives.viperelevators.listener.ElevatorsListener;
+import dev.expectatives.viperelevators.util.CC;
 
 /**
- * 
  * @author Cristhian (Expectatives)
- * sàbado, junio 05, 2021
+ * lunes, junio 21, 2021
  */
 
-public class Main extends JavaPlugin implements Listener
-{
+public class Main extends JavaPlugin {
+	private static Main plugin;
     PluginDescriptionFile pdffile = getDescription();
     public String version = pdffile.getVersion();
-    public String name = ChatColor.GRAY+"["+ChatColor.GOLD+pdffile.getName()+ChatColor.GRAY+"]";
+    public String name = CC.translate("&7[&6"+pdffile.getName()+"&7]");
 	
     public void onEnable() {
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"----------------------------------------");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GOLD+"   ViperElevators Plugin");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Has been enabled (version: "+ChatColor.YELLOW+version+ChatColor.WHITE+")");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Plugin made by: "+ChatColor.YELLOW+"Expectatives#1157");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.YELLOW+" Registering config.yml file...");
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-        Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Successfully registered config.yml file!");
-        Bukkit.getConsoleSender().sendMessage(name+ChatColor.YELLOW+" Registering listeners...");
-        this.getServer().getPluginManager().registerEvents((Listener)this, (Plugin)this);
-        Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Successfully registered listeners!");
-        Bukkit.getConsoleSender().sendMessage(name+ChatColor.GREEN+" Plugin load all Elevators config!");
-        Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"");
-		Bukkit.getConsoleSender().sendMessage(name+ChatColor.WHITE+" Discord Server: "+ChatColor.YELLOW+"https://dsc.gg/faithcommunity/");
-		Bukkit.getConsoleSender().sendMessage(name+ChatColor.GRAY+"----------------------------------------");
+    	CC.log(name+"&7&m----------------------------------------");
+    	CC.log(name+"&6&l   ViperElevators Plugin");
+    	CC.log(name+"");
+    	CC.log(name+" &fHas been enabled (version: &e"+version+"&f)");
+    	CC.log(name+" &fPlugin made by: &eExpectatives#1157");
+    	CC.log(name+"");
+    	Main.plugin = this;
+    	CC.log(name+" &eRegistering config.yml file...");
+    	new ConfigFile();
+    	CC.log(name+" &aSuccessfully registered config.yml!");
+    	CC.log(name+" &eRegistering listener...");
+    	final PluginManager pm = Bukkit.getServer().getPluginManager();
+    	pm.registerEvents((Listener)new ElevatorsListener(), (Plugin)this);
+    	CC.log(name+" &aSuccessfully registered listener!");
+    	CC.log(name+" &aPlugin load &fall &aelevators signs!");
+    	CC.log(name+"");
+    	CC.log(name+" &fDiscord Server: &ehttps://dsc.gg/faithcommunity/");
+    	CC.log(name+"&7&m----------------------------------------");
     }
     
     public void onDisable() {
-    	Bukkit.getConsoleSender().sendMessage(name+ChatColor.RED+" Plugin disable!");
+    	CC.log(name+" &cSuccessfully disable plugin!");
     }
     
-    @EventHandler
-    public void signUpdate(final SignChangeEvent event) {
-        if (event.getLine(0).equalsIgnoreCase("[Elevator]")) {
-            if (event.getLine(1).equalsIgnoreCase("Up")) {
-                event.setLine(0, "");
-                event.setLine(2, "Up");
-            }
-            else if (event.getLine(1).equalsIgnoreCase("Down")) {
-                event.setLine(0, "");
-                event.setLine(2, "Down");
-            }
-            else {
-                event.getBlock().breakNaturally();
-                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.BREAK_MESSAGE")));
-            }
-            event.setLine(1, ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.TITLE")));
-        }
-    }
-    
-    @EventHandler
-    public void PlayerInteractEvent(final PlayerInteractEvent event) {
-    	if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.WALL_SIGN) || (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.SIGN_POST)) {
-        	final Block block = event.getClickedBlock();
-        	final Sign sing = (Sign)event.getClickedBlock().getState();
-            if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
-            	if (sing.getLine(1).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.TITLE")))) {
-                    if (sing.getLine(2).equalsIgnoreCase("Up")) {
-                        final Location loc = event.getClickedBlock().getLocation().add(0.0, 1.0, 0.0);
-                        while (loc.getY() < 254.0) {
-                            if (loc.getBlock().getType() != Material.AIR) {
-                                while (loc.getBlockY() < 254) {
-                                    if (loc.getBlock().getType() == Material.AIR && loc.add(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
-                                        final Location pl = event.getPlayer().getLocation();
-                                        event.getPlayer().teleport(new Location(pl.getWorld(), loc.getX() + 0.5, loc.getY() - 1.0, loc.getZ() + 0.5, pl.getYaw(), pl.getPitch()));
-                                        break;
-                                    }
-                                    loc.add(0.0, 1.0, 0.0);
-                                }
-                                break;
-                            }
-                            loc.add(0.0, 1.0, 0.0);
-                        }
-                        if (loc.getY() == 254.0) {
-                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
-                        }
-                    }
-                    else if (sing.getLine(2).equalsIgnoreCase("Down")) {
-                        final Location loc = event.getClickedBlock().getLocation().subtract(0.0, 1.0, 0.0);
-                        while (loc.getY() > 2.0) {
-                            if (loc.getBlock().getType() != Material.AIR) {
-                                while (loc.getY() > 2.0) {
-                                    if (loc.getBlock().getType() == Material.AIR && loc.subtract(0.0, 1.0, 0.0).getBlock().getType() == Material.AIR) {
-                                        event.getPlayer().teleport(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getY(), loc.getZ() + 0.5, event.getPlayer().getLocation().getYaw(), event.getPlayer().getLocation().getPitch()));
-                                        break;
-                                    }
-                                    loc.subtract(0.0, 1.0, 0.0);
-                                }
-                                break;
-                            }
-                            loc.subtract(0.0, 1.0, 0.0);
-                        }
-                        if (loc.getY() == 2.0) {
-                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("ELEVATOR_SIGN.NO_FOUND_MESSAGE")));
-                        }
-                    }
-                }
-            }
-            
-        }
+	public static Main getPlugin() {
+        return Main.plugin;
     }
 }

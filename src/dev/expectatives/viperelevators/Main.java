@@ -45,8 +45,8 @@ public class Main extends JavaPlugin {
     public void onDisable() {
     	CC.log(name+" &cSuccessfully disable plugin!");
     }
-    
-	public static Main getPlugin() {
+
+    public static Main getPlugin() {
         return Main.plugin;
     }
 }

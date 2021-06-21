@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 
 public class CC {
 	
-	public static String translate(String i) {
+    public static String translate(String i) {
         return ChatColor.translateAlternateColorCodes('&', i);
     }
     public static void log(String i) {

@@ -19,9 +19,9 @@ import dev.expectatives.viperelevators.util.CC;
  */
 
 public class ElevatorsListener implements Listener {
-  	FileConfiguration config = ConfigFile.getConfig();
+    FileConfiguration config = ConfigFile.getConfig();
   
-	@EventHandler
+    @EventHandler
     public void onSignChange(final SignChangeEvent event) {
         if (event.getLine(0).equalsIgnoreCase("[Elevator]")) {
             if (event.getLine(1).equalsIgnoreCase("Up")) {
